@@ -4,35 +4,41 @@ public class Driver
 	public static void main(String[] args)
 	{
 		String bin = "10101010101111111";
-		int dec = Driver.binaryToDecimal(bin);
-		String hex = Driver.decimalToHex(dec);
-		System.out.println(hex);
-	}
-	static String decimalToHex(int dec)
-	{
+		bin = Driver.padZeroForHex(bin);
 		String answer = "";
-		String map = "0123456789ABCDEF";
-		while(dec > 0)
+		for(int i = 0; i < bin.length(); i += 4)
 		{
-			answer = map.charAt(dec%16) + answer;
-			dec /= 16;
+			answer = answer + nibbleToHextet("" + bin.charAt(i) + 
+					bin.charAt(i+1) + bin.charAt(i+2) + bin.charAt(i+3));
+
 		}
-		return answer;
+		System.out.println(answer);
+
 	}
 	
-	static int binaryToDecimal(String bin)
+	static String nibbleToHextet(String nibble)
 	{
-		int place = 1;
-		int sum = 0;
-		for(int i = bin.length()-1; i >= 0; i--)
+		String[] nibbles = {"0000","0001","0010","0011","0100","0101",
+				"0110","0111","1000","1001","1010","1011","1100","1101","1110","1111"};
+		String map = "0123456789ABCDEF";
+		
+		for(int i = 0; i < nibbles.length; i++)
 		{
-			if(bin.charAt(i) == '1')
+			if(nibbles[i].equals(nibble))
 			{
-				sum += place;
+				return "" + map.charAt(i);
 			}
-			place *= 2;
 		}
-		return sum;
-			
+		return "-1";
+	}
+	
+	static String padZeroForHex(String bin)
+	{
+		int zerosToAdd = 4 - (bin.length()%4);
+		for(int i = 0; i < zerosToAdd; i++)
+		{
+			bin = "0" + bin;
+		}
+		return bin;
 	}
 }
